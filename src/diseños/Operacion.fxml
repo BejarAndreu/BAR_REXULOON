@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane id="AnchorPane" prefHeight="385.0" prefWidth="499.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ControladorOperacion">
+    <children>
+        <Button fx:id="cobrar" layoutX="219.0" layoutY="75.0" onAction="#Cobrar" text="Cobrar" />
+        <Button fx:id="boton_anadir" layoutX="219.0" layoutY="38.0" onAction="#AñadirProducto" text="Añadir producto" />
+        <TextArea layoutX="14.0" layoutY="41.0" prefHeight="200.0" prefWidth="200.0" />
+        <Text layoutX="14.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lista de productos" />
+      <Button fx:id="factura" layoutX="219.0" layoutY="116.0" mnemonicParsing="false" text="Crear factura" />
+    </children>
+</AnchorPane>

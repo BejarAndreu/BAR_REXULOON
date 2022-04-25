@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ControladorProductos">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#cad0d7" height="118.0" layoutX="35.0" layoutY="43.0" stroke="BLACK" strokeType="INSIDE" width="525.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#cad0d7" height="118.0" layoutX="35.0" layoutY="199.0" stroke="BLACK" strokeType="INSIDE" width="525.0" />
+      <ImageView fx:id="coca" fitHeight="63.0" fitWidth="67.0" layoutX="47.0" layoutY="214.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imagenes/coca_cola.jpg" />
+         </image>
+      </ImageView>
+      <Text layoutX="35.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="COMDIAS" />
+      <Text layoutX="35.0" layoutY="196.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BEBIDAS" />
+      <ImageView fx:id="fanta" fitHeight="63.0" fitWidth="67.0" layoutX="136.0" layoutY="214.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imagenes/fanta.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="agua" fitHeight="63.0" fitWidth="46.0" layoutX="223.0" layoutY="214.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imagenes/agua.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="pizza" fitHeight="63.0" fitWidth="67.0" layoutX="47.0" layoutY="57.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imagenes/pizza.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="hamburguesa" fitHeight="63.0" fitWidth="67.0" layoutX="130.0" layoutY="57.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imagenes/hamburguesa.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="bocata" fitHeight="63.0" fitWidth="67.0" layoutX="209.0" layoutY="57.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imagenes/bocata.jpg" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

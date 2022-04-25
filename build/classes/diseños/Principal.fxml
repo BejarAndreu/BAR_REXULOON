@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ControladorPrincipal">
+   <children>
+      <ImageView fx:id="mesa1" fitHeight="74.0" fitWidth="101.0" layoutX="48.0" layoutY="45.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imagenes/mesa.jpg" />
+         </image>
+      </ImageView>
+      <Text layoutX="66.0" layoutY="132.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mesa 1" />
+      
+      <ImageView fx:id="mesa2" fitHeight="74.0" fitWidth="101.0" layoutX="263.0" layoutY="45.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imagenes/mesa.jpg" />
+         </image>
+      </ImageView>
+      <Text layoutX="281.0" layoutY="132.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mesa 2" />
+      
+      <ImageView fx:id="mesa3" fitHeight="74.0" fitWidth="101.0" layoutX="463.0" layoutY="45.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imagenes/mesa.jpg" />
+         </image>
+      </ImageView>
+      <Text layoutX="481.0" layoutY="132.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mesa 3" />
+      
+      <ImageView fx:id="mesa4" fitHeight="74.0" fitWidth="101.0" layoutX="48.0" layoutY="200.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imagenes/mesa.jpg" />
+         </image>
+      </ImageView>
+      <Text layoutX="66.0" layoutY="287.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mesa 4" />
+      
+      <ImageView fx:id="mesa5" fitHeight="74.0" fitWidth="101.0" layoutX="263.0" layoutY="200.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imagenes/mesa.jpg" />
+         </image>
+      </ImageView>
+      <Text layoutX="281.0" layoutY="286.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mesa 5" />
+      
+      <ImageView fx:id="mesa6" fitHeight="74.0" fitWidth="101.0" layoutX="463.0" layoutY="200.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imagenes/mesa.jpg" />
+         </image>
+      </ImageView>
+      <Text layoutX="481.0" layoutY="287.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mesa 6" />
+   </children>
+</AnchorPane>
