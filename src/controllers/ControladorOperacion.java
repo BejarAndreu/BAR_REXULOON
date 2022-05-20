@@ -62,6 +62,15 @@ public class ControladorOperacion implements Initializable {
     @FXML
     private Button factura;
     
+    @FXML
+    private Button cobrar;
+    
+    @FXML
+    private Label texto;
+    
+    @FXML
+    private Label texto2;
+    
    
     
     @FXML
@@ -84,46 +93,97 @@ public class ControladorOperacion implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-       factura.setOnAction(new EventHandler() {
-            @Override
-            public void handle(Event event) {
-                try {
-                    
-                    Connection conn = Connexion();
-                    
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");  
-                    LocalDateTime now = LocalDateTime.now();
-                    String date = formatter.format(now);
-                    
-                    String sql = "insert into factura values ("+obten_nuevo_idFactura()+","+mesa+",0,'"+date+"');";
-                    Statement stmt = conn.createStatement();
-                    stmt.executeUpdate(sql);
-                    System.out.println("Has creado una factura para la mesa "+mesa);
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(ControladorOperacion.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (SQLException ex) {
-                    Logger.getLogger(ControladorOperacion.class.getName()).log(Level.SEVERE, null, ex);
-                } 
+        
+        try {
+            System.out.println("Actualmente estas operando sobre la factura "+obten_idFactura());
+            Connection conn = Connexion();
+            
+            String sql = "select p.nombre as nombre from producto_factura as pf join producto as p on pf.producto_id = p.producto_id where pf.factura_id = "+obten_idFactura()+";";
+            
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            
+            String resultado = "";
+            while (rs.next())
+            {
+                resultado += rs.getString("nombre");
+                resultado += "\n";
+                
             }
-        });
-    }    
+            System.out.println(resultado);
+            texto.setText(resultado);
+            conn.close();
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(ControladorOperacion.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+                Logger.getLogger(ControladorOperacion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            factura.setOnAction(new EventHandler() {
+                @Override
+                public void handle(Event event) {
+                    try {
+                        
+                        Connection conn = Connexion();
+                        
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                        LocalDateTime now = LocalDateTime.now();
+                        String date = formatter.format(now);
+                        int id = obten_nuevo_idFactura();
+                        String sql = "insert into factura values ("+id+","+mesa+",0,'"+date+"');"
+                                + "update mesa set disponible = false, id_factura_actual = "+id+" where mesa_id = "+mesa+";";
+                        Statement stmt = conn.createStatement();
+                        stmt.executeUpdate(sql);
+                        System.out.println("Has creado una factura para la mesa "+mesa);
+                        texto.setText("");
+                        conn.close();
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(ControladorOperacion.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(ControladorOperacion.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
+            
+            cobrar.setOnAction(new EventHandler() {
+                @Override
+                public void handle(Event event) {
+                    try {
+                        
+                        Connection conn = Connexion();
+                        
+                        String sql = "update mesa set disponible = true, id_factura_actual = null where mesa_id = "+mesa+";";
+                        Statement stmt = conn.createStatement();
+                        stmt.executeUpdate(sql);
+                        System.out.println("Has cobrado la factura "+obten_idFactura()+" y por tanto se ha eliminado de la base de datos");
+                        conn.close();
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(ControladorOperacion.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(ControladorOperacion.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
+    }       
+    
     
    static int obten_nuevo_idFactura() throws ClassNotFoundException, SQLException{
        Connection conn = Connexion();
-       String sql = "SELECT count(*) from factura";
+       String sql = "SELECT max(factura_id) from factura";
        Statement stmt = conn.createStatement();
        ResultSet rs = stmt.executeQuery(sql);
        int id = 0;
        if(rs.next()){
         id = rs.getInt(1);
        }
-       System.out.println(id);
+       System.out.println("Has creaod el id "+id +1);
+       conn.close();
        return id+1;
    }
    
    static int obten_idFactura() throws ClassNotFoundException, SQLException{
        Connection conn = Connexion();
-       String sql = "SELECT max(factura_id) from factura where mesa_id = '"+mesa+"'";
+       String sql = "SELECT id_factura_actual from mesa where mesa_id = "+mesa+";";
        Statement stmt = conn.createStatement();
        ResultSet rs = stmt.executeQuery(sql);
        int id = 0;
@@ -131,6 +191,7 @@ public class ControladorOperacion implements Initializable {
         id = rs.getInt(1);
        }
        System.out.println(id);
+       conn.close();
        return id;
    }
     

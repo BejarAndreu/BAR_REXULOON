@@ -54,7 +54,7 @@ public class ControladorPrincipal implements Initializable {
     public static Connection Connexion() throws ClassNotFoundException, SQLException{
         String myDriver = "org.postgresql.Driver";
         Class.forName(myDriver);
-        Connection conn = DriverManager.getConnection("jdbc:postgresql://10.2.205.28:5432/bar","bar", "bar");
+        Connection conn = DriverManager.getConnection("jdbc:postgresql://10.2.205.28:5432/bar2","bar", "bar");
         return conn;
     } 
     

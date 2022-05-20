@@ -81,7 +81,7 @@ public class ControladorProductos implements Initializable {
                     String sql = "select * from producto where nombre = 'Coca-cola'";
                     ResultSet rs = stmt.executeQuery(sql);
                     añadir_producto(rs);
-                    
+                    conn.close();
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(ControladorProductos.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (SQLException ex) {
@@ -100,7 +100,7 @@ public class ControladorProductos implements Initializable {
                     String sql = "select * from producto where nombre = 'Bocadillo lomo'";
                     ResultSet rs = stmt.executeQuery(sql);
                     añadir_producto(rs);
-                    
+                    conn.close();
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(ControladorProductos.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (SQLException ex) {
@@ -119,7 +119,7 @@ public class ControladorProductos implements Initializable {
                     String sql = "select * from producto where nombre = 'Fanta'";
                     ResultSet rs = stmt.executeQuery(sql);
                     añadir_producto(rs);
-                    
+                    conn.close();
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(ControladorProductos.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (SQLException ex) {
@@ -138,7 +138,7 @@ public class ControladorProductos implements Initializable {
                     String sql = "select * from producto where nombre = 'Agua'";
                     ResultSet rs = stmt.executeQuery(sql);
                     añadir_producto(rs);
-                    
+                    conn.close();
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(ControladorProductos.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (SQLException ex) {
@@ -178,7 +178,7 @@ public class ControladorProductos implements Initializable {
             rs_actualiza.absolute(1);
             rs_actualiza.updateInt("precio", suma);
             rs_actualiza.updateRow();
-            
+            conn.close();
             
         }catch(SQLException e){
             System.err.println("Got an exception! ");
