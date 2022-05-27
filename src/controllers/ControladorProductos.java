@@ -41,6 +41,15 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import static sun.misc.Signal.handle;
 import static controllers.ControladorPrincipal.Connexion;
+import java.sql.PreparedStatement;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.text.Text;
 
 /**
  *
@@ -48,144 +57,185 @@ import static controllers.ControladorPrincipal.Connexion;
  */
 public class ControladorProductos implements Initializable {
     
+    @FXML
+    private ComboBox productos;
     
     @FXML
-    private ImageView coca;
-    @FXML
-    private ImageView bocata;
-    @FXML
-    private ImageView fanta;
-    @FXML
-    private ImageView agua;
-    @FXML
-    private ImageView pizza;
-    @FXML
-    private ImageView hamburguesa;
+    private ComboBox tipos;
     
+    @FXML
+    private Text texto;
     
+    @FXML
+    private Button añadir;
     
+    @FXML
+    private void volver_producto(ActionEvent event) throws IOException {
+        URL url = new File("src/diseños/Operacion.fxml").toURI().toURL();
+        FXMLLoader fxmlLoader = new FXMLLoader(url);
+        Parent root2 = (Parent)fxmlLoader.load();
+        Stage stage3 = new Stage();
+        stage3.setScene(new Scene(root2));
+        stage3.show();
+        ((Node)(event.getSource())).getScene().getWindow().hide();
+    }
       
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //COMO CREAR UN IMAGEVIEW
-        //https://www.tutorialspoint.com/how-to-display-an-image-in-javafx#:~:text=Create%20a%20FileInputStream%20representing%20the,to%20the%20setImage()%20method.
-        
-        
-        coca.setOnMouseClicked(new EventHandler() {
+        try {
+            Connection conn = Connexion();
+            Statement stmt = conn.createStatement();
+            String query = "select distinct tipo from producto";
+            ResultSet rs = stmt.executeQuery(query);
+            ObservableList<String> tipos_des = FXCollections.observableArrayList();
             
+            while(rs.next()){
+                tipos_des.add(rs.getString("tipo"));
+            }
+            
+            tipos.setItems(tipos_des);
+
+            conn.close();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ControladorProductos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorProductos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        tipos.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public void handle(Event event) {
+            public void handle(ActionEvent event) {
                 try {
                     Connection conn = Connexion();
                     Statement stmt = conn.createStatement();
-                    String sql = "select * from producto where nombre = 'Coca-cola'";
-                    ResultSet rs = stmt.executeQuery(sql);
-                    añadir_producto(rs);
+                    texto.setText(tipos.getValue().toString());
+                    String query = "select nombre from producto where tipo = '"+tipos.getValue().toString()+"';";
+                    
+                    ResultSet rs = stmt.executeQuery(query);
+                    
+                    ObservableList<String> productos_des = FXCollections.observableArrayList();
+                    
+                    while(rs.next()){
+                        productos_des.add(rs.getString("nombre"));
+                    }
+                    
+                    productos.setItems(productos_des);
+                    
                     conn.close();
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(ControladorProductos.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (SQLException ex) {
                     Logger.getLogger(ControladorProductos.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
             }
         });
         
-        bocata.setOnMouseClicked(new EventHandler() {
+        añadir.setOnMouseClicked(new EventHandler() {
             @Override
             public void handle(Event event) {
                 try {
                     Connection conn = Connexion();
                     Statement stmt = conn.createStatement();
-                    String sql = "select * from producto where nombre = 'Bocadillo lomo'";
-                    ResultSet rs = stmt.executeQuery(sql);
-                    añadir_producto(rs);
+                    
+                    String query = "select * from producto where nombre = '"+productos.getValue().toString()+"';";
+                    
+                    ResultSet rs = stmt.executeQuery(query);
+                    int id = 0;
+                    while(rs.next()){
+                        id = rs.getInt("producto_id");
+                    }
+                    
+                    anyadirProducto(id,mesa,"1");
                     conn.close();
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(ControladorProductos.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (SQLException ex) {
                     Logger.getLogger(ControladorProductos.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
             }
         });
-        
-        fanta.setOnMouseClicked(new EventHandler() {
-            @Override
-            public void handle(Event event) {
-                try {
-                    Connection conn = Connexion();
-                    Statement stmt = conn.createStatement();
-                    String sql = "select * from producto where nombre = 'Fanta'";
-                    ResultSet rs = stmt.executeQuery(sql);
-                    añadir_producto(rs);
-                    conn.close();
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(ControladorProductos.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (SQLException ex) {
-                    Logger.getLogger(ControladorProductos.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                
-            }
-        });
-        
-        agua.setOnMouseClicked(new EventHandler() {
-            @Override
-            public void handle(Event event) {
-                try {
-                    Connection conn = Connexion();
-                    Statement stmt = conn.createStatement();
-                    String sql = "select * from producto where nombre = 'Agua'";
-                    ResultSet rs = stmt.executeQuery(sql);
-                    añadir_producto(rs);
-                    conn.close();
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(ControladorProductos.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (SQLException ex) {
-                    Logger.getLogger(ControladorProductos.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                
-            }
-        });
-        
     }    
     
     
-    public void añadir_producto(ResultSet rs) {
-        try{
-            Connection conn = Connexion();
-            Statement stmt = conn.createStatement();
-            int producto_id = 0;
-            float precio_venta = 0;
-            if(rs.next()){
-                producto_id = rs.getInt(1);
-                precio_venta = rs.getFloat("precio_venta");
+    
+    public static boolean anyadirProducto(int id_producto, int id_mesa, String cantidad) throws ClassNotFoundException, SQLException{
+    boolean res = false;
+    Connection conn = Connexion();
+    try {
+        //Primero busca la disponibilidad y que factura tiene asignada actualmente
+        String query = "select disponible,id_factura_actual from mesa where mesa_id="+id_mesa;
+        PreparedStatement st = conn.prepareStatement(query);
+        ResultSet rs = st.executeQuery();
+        if(!rs.isClosed() && rs.next()){
+            if(rs.getBoolean("disponible")) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Calendar c = Calendar.getInstance();
+                String date = sdf.format(c.getTime());
+                //En caso de estar disponible quiere decir que hay que crear una factura nueva
+                query = "insert into factura(mesa_id,precio,fecha) values(" + id_mesa + ",0,'" + date + "')";
+                st = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+                st.executeUpdate();
+                //Con este comando podemos conseguir la ultima id generada por la ultima query ejecutada por nuestro codigo
+                rs = st.getGeneratedKeys();
+                if (rs != null && rs.next()) {
+                    long id_factura = rs.getLong(1);
+                    //Actualizamos el estado de la mesa a no disponible y le asignamos la id de la factura asignada a esa mesa
+                    query = "update mesa set disponible=false, id_factura_actual=" + id_factura + " where mesa_id=" + id_mesa;
+                    st = conn.prepareStatement(query);
+                    st.executeUpdate();
+                    //Cogemos el precio del producto que escogemos en el ComboBox (desplegable)
+                    query = "select precio_venta from producto where producto_id=" + id_producto;
+                    st = conn.prepareStatement(query);
+                    rs = st.executeQuery();
+                    float precio = 0;
+                    if (rs.next()) precio = rs.getFloat("precio_venta");
+                    //Creamos el registro de la tabla intermedia entre factura y producto y ponemos cantidad pasada por parametro, el precio del producto
+                    //y la id de la factura y del producto
+                    query = "insert into producto_factura(factura_id,producto_id,cantidad,importe_parcial) values(" + id_factura + "," + id_producto + "," + cantidad + "," + precio + ")";
+                    st = conn.prepareStatement(query);
+                    st.executeUpdate();
+                    res=true;
+                }
             }
-            String sql = "INSERT INTO producto_factura (factura_id,producto_id,cantidad,importe_parcial) "
-                        + "VALUES ("+obten_idFactura()+","+producto_id+",1,"+precio_venta+");";
-            stmt.executeUpdate(sql);
-            
-            String query_suma = "SELECT SUM(importe_parcial) where factura_id = "+obten_idFactura()+";";
-            ResultSet rs_suma = stmt.executeQuery(query_suma);
-            int suma = 0;
-            if(rs_suma.next()){
-                suma = rs_suma.getInt(1);                
+            else if(!rs.getBoolean("disponible")){
+                //En caso de la mesa no estar disponible cogemos la id de la factura actual
+                int id_factura = rs.getInt("id_factura_actual");
+                //Con esa id buscamos si existe ya un registro en la tabla intermedia entre producto y factura con los ids proporcionados
+                query = "select * from producto_factura where factura_id="+id_factura+" and producto_id="+id_producto;
+                st = conn.prepareStatement(query);
+                rs = st.executeQuery();
+                if(rs.next()){
+                    //En caso de existir sumamos la cantidad y un trigger se encargará de actualizar el precio parcial
+                    query = "update producto_factura set cantidad=cantidad+"+cantidad+" where factura_id="+id_factura+" and producto_id="+id_producto;
+                    st = conn.prepareStatement(query);
+                    st.executeUpdate();
+                    res=true;
+                }
+                else{
+                    //En caso de no existir creamos un nuevo registro con id de factura, id de producto, cantidad y el precio que recogemos
+                    query = "select precio_venta from producto where producto_id="+id_producto;
+                    st = conn.prepareStatement(query);
+                    rs = st.executeQuery();
+                    float precio = 0;
+                    if(rs.next())precio=rs.getFloat("precio_venta");
+                    query = "insert into producto_factura(factura_id,producto_id,cantidad,importe_parcial) values("+id_factura+","+id_producto+","+cantidad+","+precio+")";
+                    st = conn.prepareStatement(query);
+                    st.executeUpdate();
+                    res=true;
+                }
             }
-
-            
-            String query_actualiza = "SELECT * FROM factura;";
-            ResultSet rs_actualiza = stmt.executeQuery(query_actualiza);
-            rs_actualiza.absolute(1);
-            rs_actualiza.updateInt("precio", suma);
-            rs_actualiza.updateRow();
-            conn.close();
-            
-        }catch(SQLException e){
-            System.err.println("Got an exception! ");
-            System.err.println(e.getMessage());
-        }catch (ClassNotFoundException ex) {
-            Logger.getLogger(ControladorProductos.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+    } catch (SQLException throwables) {
+        throwables.printStackTrace();
+        res=false;
     }
+    try {
+        conn.close();
+    } catch (SQLException throwables) {
+        throwables.printStackTrace();
+    }
+    return res;
+}
     
 }

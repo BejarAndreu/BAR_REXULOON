@@ -22,6 +22,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -36,12 +37,15 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
@@ -69,7 +73,13 @@ public class ControladorOperacion implements Initializable {
     private Label texto;
     
     @FXML
-    private Label texto2;
+    private Text total;
+    
+    @FXML
+    private TextField pagado;
+    
+    @FXML
+    private Text cambio;
     
    
     
@@ -79,17 +89,25 @@ public class ControladorOperacion implements Initializable {
     }
     
     @FXML
-    private void AñadirProducto(ActionEvent event) throws IOException {
-        System.out.println("Clicaste Añadir producto!");
-        
+    private void abrir_producto(ActionEvent event) throws IOException {
         URL url = new File("src/diseños/Productos.fxml").toURI().toURL();
         FXMLLoader fxmlLoader = new FXMLLoader(url);
         Parent root1 = (Parent)fxmlLoader.load();
         Stage stage2 = new Stage();
         stage2.setScene(new Scene(root1));
         stage2.show();
+        ((Node)(event.getSource())).getScene().getWindow().hide();
     }
-    
+    @FXML
+    private void volver_inicio(ActionEvent event) throws IOException {
+        URL url = new File("src/diseños/Principal.fxml").toURI().toURL();
+        FXMLLoader fxmlLoader = new FXMLLoader(url);
+        Parent root1 = (Parent)fxmlLoader.load();
+        Stage stage2 = new Stage();
+        stage2.setScene(new Scene(root1));
+        stage2.show();
+        ((Node)(event.getSource())).getScene().getWindow().hide();
+    }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -98,7 +116,7 @@ public class ControladorOperacion implements Initializable {
             System.out.println("Actualmente estas operando sobre la factura "+obten_idFactura());
             Connection conn = Connexion();
             
-            String sql = "select p.nombre as nombre from producto_factura as pf join producto as p on pf.producto_id = p.producto_id where pf.factura_id = "+obten_idFactura()+";";
+            String sql = "select p.nombre as nombre, pf.importe_parcial as importe from producto_factura as pf join producto as p on pf.producto_id = p.producto_id where pf.factura_id = "+obten_idFactura()+";";
             
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
@@ -107,11 +125,22 @@ public class ControladorOperacion implements Initializable {
             while (rs.next())
             {
                 resultado += rs.getString("nombre");
+                resultado += "\t\t";
+                resultado += rs.getFloat("importe")+"€";
                 resultado += "\n";
                 
             }
-            System.out.println(resultado);
             texto.setText(resultado);
+            
+            String query = "select precio from factura where factura_id = "+obten_idFactura()+";";
+            rs = stmt.executeQuery(query);
+            
+            String resultado2 = "";
+            while (rs.next())
+            {
+                resultado2 = rs.getString("precio");
+            }
+            total.setText(resultado2);
             conn.close();
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(ControladorOperacion.class.getName()).log(Level.SEVERE, null, ex);
@@ -149,13 +178,46 @@ public class ControladorOperacion implements Initializable {
                 @Override
                 public void handle(Event event) {
                     try {
-                        
                         Connection conn = Connexion();
-                        
-                        String sql = "update mesa set disponible = true, id_factura_actual = null where mesa_id = "+mesa+";";
                         Statement stmt = conn.createStatement();
-                        stmt.executeUpdate(sql);
-                        System.out.println("Has cobrado la factura "+obten_idFactura()+" y por tanto se ha eliminado de la base de datos");
+                        
+                        String query = "select precio from factura where factura_id = "+obten_idFactura()+";";
+                        ResultSet rs = stmt.executeQuery(query);
+
+                        float precio_total = 0;
+                        while (rs.next())
+                        {
+                            precio_total = rs.getFloat("precio");
+                        }
+                        DecimalFormat nf = new DecimalFormat("#.00");
+                        float paga = Float.parseFloat(pagado.getText());
+                        float resto = precio_total - paga;
+                        if(resto == 0){
+                            cambio.setText("0");
+                            total.setText("0");
+                            pagado.setText("");
+                            String sql = "update mesa set disponible = true, id_factura_actual = null where mesa_id = "+mesa+";";
+                            stmt.executeUpdate(sql);
+                        }else{
+                            if(resto > 0){
+                                total.setText(String.valueOf(nf.format(resto)));
+                                pagado.setText("");
+                                cambio.setText("0");
+                                query = "update factura set precio = "+resto+";";
+                                stmt.executeUpdate(query);
+                            }else{
+                                if(resto < 0){
+                                    total.setText("0");
+                                    pagado.setText("");
+                                    cambio.setText(String.valueOf(nf.format(resto)));
+                                    String sql = "update mesa set disponible = true, id_factura_actual = null where mesa_id = "+mesa+";";
+                                    stmt.executeUpdate(sql);
+                                }
+                            }
+                        }
+                        
+                        
+                        
                         conn.close();
                     } catch (ClassNotFoundException ex) {
                         Logger.getLogger(ControladorOperacion.class.getName()).log(Level.SEVERE, null, ex);
@@ -176,7 +238,8 @@ public class ControladorOperacion implements Initializable {
        if(rs.next()){
         id = rs.getInt(1);
        }
-       System.out.println("Has creaod el id "+id +1);
+       id += 1;
+       System.out.println("Has creado el id "+id);
        conn.close();
        return id+1;
    }

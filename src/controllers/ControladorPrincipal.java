@@ -22,6 +22,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
@@ -63,6 +64,8 @@ public class ControladorPrincipal implements Initializable {
         mesa1.setOnMouseClicked(new EventHandler() {
             @Override
             public void handle(Event event) {
+                mesa = 1;
+                System.out.println(mesa);
                 try {
                     URL url = new File("src/diseños/Operacion.fxml").toURI().toURL();
                     FXMLLoader fxmlLoader = new FXMLLoader(url);
@@ -75,14 +78,15 @@ public class ControladorPrincipal implements Initializable {
                 } catch (IOException ex) {
                     Logger.getLogger(ControladorPrincipal.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                mesa = 1;
-                System.out.println(mesa);
+                
             }
         });
         
         mesa2.setOnMouseClicked(new EventHandler() {
             @Override
             public void handle(Event event) {
+                mesa = 2;
+                System.out.println(mesa);
                 try {
                     URL url = new File("src/diseños/Operacion.fxml").toURI().toURL();
                     FXMLLoader fxmlLoader = new FXMLLoader(url);
@@ -90,19 +94,21 @@ public class ControladorPrincipal implements Initializable {
                     Stage stage3 = new Stage();
                     stage3.setScene(new Scene(root2));
                     stage3.show();
+                    ((Node)(event.getSource())).getScene().getWindow().hide();
                 } catch (MalformedURLException ex) {
                     Logger.getLogger(ControladorPrincipal.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {
                     Logger.getLogger(ControladorPrincipal.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                mesa = 2;
-                System.out.println(mesa);
+                
             }
         });
         
         mesa3.setOnMouseClicked(new EventHandler() {
             @Override
             public void handle(Event event) {
+                mesa = 3;
+                System.out.println(mesa);
                 try {
                     URL url = new File("src/diseños/Operacion.fxml").toURI().toURL();
                     FXMLLoader fxmlLoader = new FXMLLoader(url);
@@ -110,19 +116,21 @@ public class ControladorPrincipal implements Initializable {
                     Stage stage3 = new Stage();
                     stage3.setScene(new Scene(root2));
                     stage3.show();
+                    ((Node)(event.getSource())).getScene().getWindow().hide();
                 } catch (MalformedURLException ex) {
                     Logger.getLogger(ControladorPrincipal.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {
                     Logger.getLogger(ControladorPrincipal.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                mesa = 3;
-                System.out.println(mesa);
+                
             }
         });
         
         mesa4.setOnMouseClicked(new EventHandler() {
             @Override
             public void handle(Event event) {
+                mesa = 4;
+                System.out.println(mesa);
                 try {
                     URL url = new File("src/diseños/Operacion.fxml").toURI().toURL();
                     FXMLLoader fxmlLoader = new FXMLLoader(url);
@@ -130,19 +138,21 @@ public class ControladorPrincipal implements Initializable {
                     Stage stage3 = new Stage();
                     stage3.setScene(new Scene(root2));
                     stage3.show();
+                    ((Node)(event.getSource())).getScene().getWindow().hide();
                 } catch (MalformedURLException ex) {
                     Logger.getLogger(ControladorPrincipal.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {
                     Logger.getLogger(ControladorPrincipal.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                mesa = 4;
-                System.out.println(mesa);
+                
             }
         });
         
         mesa5.setOnMouseClicked(new EventHandler() {
             @Override
             public void handle(Event event) {
+                mesa = 5;
+                System.out.println(mesa);
                 try {
                     URL url = new File("src/diseños/Operacion.fxml").toURI().toURL();
                     FXMLLoader fxmlLoader = new FXMLLoader(url);
@@ -150,19 +160,21 @@ public class ControladorPrincipal implements Initializable {
                     Stage stage3 = new Stage();
                     stage3.setScene(new Scene(root2));
                     stage3.show();
+                    ((Node)(event.getSource())).getScene().getWindow().hide();
                 } catch (MalformedURLException ex) {
                     Logger.getLogger(ControladorPrincipal.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {
                     Logger.getLogger(ControladorPrincipal.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                mesa = 5;
-                System.out.println(mesa);
+                
             }
         });
         
         mesa6.setOnMouseClicked(new EventHandler() {
             @Override
             public void handle(Event event) {
+                mesa = 6;
+                System.out.println(mesa);
                 try {
                     URL url = new File("src/diseños/Operacion.fxml").toURI().toURL();
                     FXMLLoader fxmlLoader = new FXMLLoader(url);
@@ -170,13 +182,13 @@ public class ControladorPrincipal implements Initializable {
                     Stage stage3 = new Stage();
                     stage3.setScene(new Scene(root2));
                     stage3.show();
+                    ((Node)(event.getSource())).getScene().getWindow().hide();
                 } catch (MalformedURLException ex) {
                     Logger.getLogger(ControladorPrincipal.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {
                     Logger.getLogger(ControladorPrincipal.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                mesa = 6;
-                System.out.println(mesa);
+                
             }
         });
         
